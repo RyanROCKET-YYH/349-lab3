@@ -46,4 +46,12 @@ struct rcc_reg_map {
 /** @brief Base address of the RCC */
 #define RCC_BASE    (struct rcc_reg_map *) 0x40023800
 
+/** @brief UART's clock enable bit */
+#define UART_CLKEN  (1 << 17)
+
+/** @brief I2C's clock enable bit(p137) */
+#define I2C1_CLKEN  (1 << 21)
+#define I2C2_CLKEN  (1 << 22)
+#define I2C3_CLKEN  (1 << 23)
+
 #endif /* _RCC_H_ */
