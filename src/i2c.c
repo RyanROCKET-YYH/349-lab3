@@ -5,7 +5,7 @@
 #include <rcc.h>
 
 
-/** @brief The UART register map. */
+/** @brief The i2c register map. */
 struct i2c_reg_map {
     volatile uint32_t CR1;      /**<  Control Register 1 */
     volatile uint32_t CR2;      /**<  Control Register 2 */
