@@ -165,6 +165,7 @@ start_kernel:
 .thumb_func
 .global _sys_tick_asm_
 _sys_tick_asm_:
+  bl systick_c_handler /* to systick_c_handler() */
   bkpt
 
 .thumb_func
