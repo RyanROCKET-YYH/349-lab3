@@ -3,6 +3,7 @@
 #include <i2c.h>
 #include <lcd_driver.h>
 #include <unistd.h>
+#include <systick.h>
 
 
 #define I2C_SLAVE_ADDR_W 0x4E   // 7 bit address
@@ -43,8 +44,14 @@ void lcd_send_data(uint8_t data) {
  * To initialize the lcd_driver.
 */
 void lcd_driver_init(){
+    // wait for 15ms
+    systick_delay(15);
     lcd_send_instruction(0b00110000);
+    // wait for 5 ms
+    systick_delay(5);
     lcd_send_instruction(0b00110000);
+    // wait for 1 ms
+    systick_delay(1);
     lcd_send_instruction(0b00110000);
 
     lcd_send_instruction(0b00100000);  // Function set (set interface to 4 bits long)
@@ -90,6 +97,8 @@ void lcd_set_cursor(uint8_t row, uint8_t col){
 */
 void lcd_clear(){
     lcd_send_instruction(0b00000001);
-    for(int i = 1; i< 2000000; i++){}
+    // for(int i = 1; i< 2000000; i++){}
+    //after clear instruction, wait for 2 sec
+    systick_delay(2000);
     return;
 }
