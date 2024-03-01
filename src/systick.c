@@ -35,8 +35,8 @@ struct stk_reg_map {
 #define STK_CTRL_COUNTFLAG (1 << 16)
 
 // count the glocal tick
-uint32_t g_tick_count;
-uint32_t g_get_tick;
+uint32_t g_tick_count = 0;
+// uint32_t g_get_tick;
 
 
 void systick_init() {
@@ -62,58 +62,32 @@ void systick_init() {
 */
 void systick_delay(uint32_t ticks) {
     uint32_t start = g_tick_count;
-    // set delay
-    while (((g_tick_count - start) < ticks)){
-        g_tick_count++;
-    }
+    // check the delay time
+    while (((g_tick_count - start) - ticks));
+    // test
+    printk("\nset delay: %d millisecond\n", ticks);
+    // test systick_get_ticks()
+    uint32_t test = systick_get_ticks();
+    printk("test: systick_get_ticks()= %d\n", test);
 }
 
-// the total number of times the systick c handler was called
+/**
+* systick_get_ticks():
+* @brief the total number of times the systick c handler was called
+*
+*/
 uint32_t systick_get_ticks() {
-    return g_get_tick;
-    // return -1;
+    // the total number of times the systick c handler was called
+    return g_tick_count;
 }
 
+/**
+* systick_c_handler():
+* @brief whenever systick interrupt happens(when 15999 counts down to 0), it will call the systick_c_handler via ivt automatically
+* we have to make a glocal variable time(g_tick_count) as a clock count.
+*
+*/
 void systick_c_handler() {
-    struct stk_reg_map* stk = STK_BASE;
-    
-    g_tick_count = 0;
-    g_get_tick = 0;
-    systick_init();
-    // g_tick_count = 0;
-    while(1){
-        //g_tick_count
-        printk("\ntest: g_tick_count= %d\n", g_tick_count);
-        // delay 1 sec
-        systick_delay(1000000);
-        printk("test: g_tick_count= %d\n", g_tick_count);
-
-        // if it counts down from the reload value to zero
-        if((!(stk->CTRL |= STK_CTRL_COUNTFLAG))){
-            systick_init();
-        }
-        g_tick_count++;
-
-        uint32_t test = systick_get_ticks();
-        printk("test: systick_get_ticks()= %d\n", test);
-    }
-
-
-    
-    
-    
-    // systick_init();
-
-    // // Increment tick counter in SysTick ISR
-    // g_tick_count++;
-    // printk("\ng_tick_count = %d\n", g_tick_count);
-
-    // uint32_t test_get_ticks = systick_get_ticks();
-    // printk("\nsystick_get_ticks = %d\n", test_get_ticks);
-
-    // // set delay: 500 milliseconds
-    // systick_delay(500);
-    // printk("\nset delay: 500 millisecond\n");
-    // test_get_ticks = systick_get_ticks();
-    // printk("\nsystick_get_ticks = %d\n", test_get_ticks);
+    // whenever call systick_c_handler, global time ++
+    g_tick_count++;
 }

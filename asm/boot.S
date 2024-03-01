@@ -28,7 +28,7 @@ ivt:
 .word   spin                /* 12 Debug reserved */
 .word   spin                /* 13 RESERVED */
 .word   _pend_sv_           /* 14 PendSV */
-.word   _sys_tick_asm_      /* 15 SysTick */
+.word   systick_c_handler      /* 15 SysTick */
 .word   spin                /* 16 IRQ0 Window Watchdog Interrupt */
 .word   spin                /* 17 IRQ1 PVD */
 .word   spin                /* 18 IRQ2 TAMPER */
@@ -165,7 +165,6 @@ start_kernel:
 .thumb_func
 .global _sys_tick_asm_
 _sys_tick_asm_:
-  bl systick_c_handler /* to systick_c_handler() */
   bkpt
 
 .thumb_func

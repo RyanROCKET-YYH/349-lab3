@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <lcd_driver.h>
 #include <keypad_driver.h>
+#include <systick.h>
 
 // define the passcode's length
 #define PASSCODE_LENGTH   (4)
@@ -202,5 +203,10 @@ int main() {
 //       }
 //     }
 //   }
+    while(1){
+        systick_init();
+        // delay 1 sec
+        systick_delay(1000);
+    }
   return 0;
 }
