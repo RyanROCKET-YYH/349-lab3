@@ -58,7 +58,7 @@ void lcd_driver_init(){
     
     // clear display
     lcd_send_instruction(0b00000001);
-    for(int i = 1; i< 2000000; i++){}
+    systick_delay(2000);
 }
 
 /*
@@ -97,7 +97,6 @@ void lcd_set_cursor(uint8_t row, uint8_t col){
 */
 void lcd_clear(){
     lcd_send_instruction(0b00000001);
-    // for(int i = 1; i< 2000000; i++){}
     //after clear instruction, wait for 2 sec
     systick_delay(2000);
     return;

@@ -18,7 +18,7 @@
 struct stk_reg_map {
     volatile uint32_t CTRL;      /**<  control and status register (STK_CTRL) */
     volatile uint32_t LOAD;      /**<  SysTick reload value register (STK_LOAD) */
-    volatile uint32_t VAL;     /**<  SysTick current value register (STK_VAL) */
+    volatile uint32_t VAL;       /**<  SysTick current value register (STK_VAL) */
     volatile uint32_t CALIB;     /**<  SysTick calibration value register (STK_CALIB) */
 };
 
@@ -43,16 +43,15 @@ void systick_init() {
     
     struct stk_reg_map* stk = STK_BASE;
 
-    // Frequency: 16MHz
-    stk->LOAD = 15999;
+    // Frequency: 16MHz 16000000 / 1000 -1
+    stk->LOAD = (uint32_t)15999;
     // clear current value
-    stk->VAL = (u_int16_t)0;
+    stk->VAL = (u_int16_t)0; // ? 
 
     // When ENABLE is set to 1, the counter loads the RELOAD value from the LOAD register and then counts down
     stk->CTRL |= STK_CTRL_EN;
     stk->CTRL |= STK_CTRL_TICKINT;
     stk->CTRL |= STK_CTRL_CLKSOURCE;
-
 }
 
 /**
@@ -63,12 +62,12 @@ void systick_init() {
 void systick_delay(uint32_t ticks) {
     uint32_t start = g_tick_count;
     // check the delay time
-    while (((g_tick_count - start) - ticks));
-    // test
-    printk("\nset delay: %d millisecond\n", ticks);
-    // test systick_get_ticks()
-    uint32_t test = systick_get_ticks();
-    printk("test: systick_get_ticks()= %d\n", test);
+    while (((g_tick_count - start) < ticks));
+    // // test
+    // printk("\nset delay: %d millisecond\n", ticks);
+    // // test systick_get_ticks()
+    // uint32_t test = systick_get_ticks();
+    // printk("test: systick_get_ticks()= %d\n", test);
 }
 
 /**

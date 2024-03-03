@@ -6,6 +6,8 @@
 #include <lcd_driver.h>
 #include <keypad_driver.h>
 #include <systick.h>
+#include <string.h>
+#include <uart.h>
 
 // define the passcode's length
 #define PASSCODE_LENGTH   (4)
@@ -122,37 +124,45 @@ void key_display(char key, uint8_t *row, uint8_t *col) {
 */
 int main() {
   // initialize the uart and keypad
-  uart_polling_init(115200);
-  keypad_init();
+  systick_init();
+  // uart_polling_init(115200);
+  uart_init(115200);
+  // keypad_init();
 
-  // set GPIO
-  // BLUE LED (D2)
-  gpio_init(GPIO_A, 10, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
-  // RED LED (D4)
-  gpio_init(GPIO_B, 5, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
-  // "ENTER" BUTTON (D6)
-  gpio_init(GPIO_B, 10, MODE_INPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_PULL_UP, ALT0);
-  // "LOCK" BUTTON (B1)
-  gpio_init(GPIO_C, 13, MODE_INPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_PULL_UP, ALT0);
+  // // set GPIO
+  // // BLUE LED (D2)
+  // gpio_init(GPIO_A, 10, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
+  // // RED LED (D4)
+  // gpio_init(GPIO_B, 5, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
+  // // "ENTER" BUTTON (D6)
+  // gpio_init(GPIO_B, 10, MODE_INPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_PULL_UP, ALT0);
+  // // "LOCK" BUTTON (B1)
+  // gpio_init(GPIO_C, 13, MODE_INPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_PULL_UP, ALT0);
 
-  // initialize the i2c_master and lcd_driver
-//   i2c_master_init(80);
-//   lcd_driver_init();
-//   lcd_clear();
+  // // initialize the i2c_master and lcd_driver
+  // i2c_master_init(80);
+  // lcd_driver_init();
+  // lcd_clear();
 
-//   // set variables for passcode, lock_systems, and lcd cursor
-//   char passcode[PASSCODE_LENGTH] = {0};
-//   uint8_t index = 0;
-//   uint8_t is_locked = 1;
-//   const char correct_passcode[PASSCODE_LENGTH] = {'#', '3', '4', '9'}; // correct passcode is "#349"
-//   uint8_t row = 0; //lcd cursor
-//   uint8_t col = 0; //lcd cursor
+  // char command[6]; // for start
+  // int index = 0;
+  // for(int i = 0; i < sizeof(command); i++) {
+  //       command[i] = 0; // Clear buffer
+  //   }
+  uart_put_byte('E');
+  uart_put_byte('n');
+  uart_put_byte('t');
+  uart_put_byte('e');
+  uart_put_byte('r');
+  uart_put_byte(' ');
 
-  printk("Enter 'Start' to begin:\n");
-//   uint8_t start = 0;
+
+  uart_put_byte('>');
+  // printk("Enter 'Start' to begin:\n");
+  // uint8_t start = 0;
 //   // make user type in "Start" to enter the passcode
-//   while(!start) {
-//     char input[5] = {0}; // buffer for start
+  // while(!start) {
+    // char input[5] = {0}; // buffer for start
 //     for (int i = 0; i < 5; i++) {
 //       input[i] = uart_polling_get_byte();
 //       uart_polling_put_byte(input[i]);
@@ -203,10 +213,7 @@ int main() {
 //       }
 //     }
 //   }
-    while(1){
-        systick_init();
-        // delay 1 sec
-        systick_delay(1000);
-    }
+
+
   return 0;
 }

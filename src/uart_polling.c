@@ -84,12 +84,3 @@ char uart_polling_get_byte (){
     // return received data
     return (char)(uart->DR);
 }
-
-
-// new functions:
-void uart_init(int baud);
-int uart_put_byte(char c);
-int uart_get_byte(char *c);
-void uart_irq_handler();
-int uart_read(int file, char *ptr, int len);
-int uart_write(int file, char *ptr, int len);
