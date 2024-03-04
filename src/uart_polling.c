@@ -54,7 +54,7 @@ void uart_polling_init (int baud){
     gpio_init(GPIO_A, 3, MODE_ALT, OUTPUT_OPEN_DRAIN, OUTPUT_SPEED_LOW, PUPD_NONE, ALT7);       /* PA_2 for RX line UART2 */
     
     // Initialize UART to the desired Baud Rate
-    *(uint16_t*)&uart->BRR = (uint16_t)UARTDIV;
+    uart->BRR = UARTDIV;
     // UART Control Registers
     uart->CR1 |= (UART_TE | UART_RE | UART_EN);
     return;

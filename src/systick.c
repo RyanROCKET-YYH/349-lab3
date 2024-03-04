@@ -35,7 +35,7 @@ struct stk_reg_map {
 #define STK_CTRL_COUNTFLAG (1 << 16)
 
 // count the glocal tick
-uint32_t g_tick_count = 0;
+volatile uint32_t g_tick_count = 0;
 // uint32_t g_get_tick;
 
 
@@ -62,12 +62,13 @@ void systick_init() {
 void systick_delay(uint32_t ticks) {
     uint32_t start = g_tick_count;
     // check the delay time
-    while (((g_tick_count - start) < ticks));
+    while (((g_tick_count - start) - ticks));
     // // test
     // printk("\nset delay: %d millisecond\n", ticks);
     // // test systick_get_ticks()
     // uint32_t test = systick_get_ticks();
     // printk("test: systick_get_ticks()= %d\n", test);
+    printk("Interrupt!\n");
 }
 
 /**
