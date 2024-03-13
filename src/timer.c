@@ -34,22 +34,65 @@ struct tim2_5 {
   volatile uint32_t or; /**< 50 Option Register */
 };
 
-struct tim2_5* const timer_base[] = {(void *)0x0,   // N/A - Don't fill out
-                                     (void *)0x0,   // N/A - Don't fill out
-                                     (void *)-1,    // TODO: fill out address for TIMER 2
-                                     (void *)-1,    // TODO: fill out address for TIMER 3
-                                     (void *)-1,    // TODO: fill out address for TIMER 4
-                                     (void *)-1};   // TODO: fill out address for TIMER 5
+struct tim2_5* const timer_base[] = {(void *)0x0,    // N/A - Don't fill out
+                                     (void *)0x0,    // N/A - Don't fill out
+                                     (void *)0x40000000, // TIMER 2 Base Address
+                                     (void *)0x40000400, // TIMER 3 Base Address
+                                     (void *)0x40000800, // TIMER 4 Base Address
+                                     (void *)0x40000C00};  // TIMER 5 Base Address
 
 
+
+/*
+* Starts the timer
+*
+* @param timer      - The timer
+* @param prescaler  - Prescalar for clock
+* @param Period     - Period of the timer interrupt
+*/
 void timer_init(UNUSED int timer, UNUSED uint32_t prescalar, UNUSED uint32_t period) {
+  if (timer < 2 || timer > 5) return; // Check for valid timer
 
+    struct tim2_5* tim = timer_base[timer];
+
+    // TODO:1. Enable the timer clock in RCC 
+
+    // 2. Set the prescalar value
+    tim->psc = prescalar - 1;
+
+    // 3. Set the auto-reload value
+    tim->arr = period - 1;
+
+    // 4. Enable the timer and its interrupt
+    tim->dier |= 1; // Update interrupt enable
+    tim->cr1 |= 1; // Enable the timer
 }
 
+/*
+* Stops the timer
+*
+* @param timer      - The timer
+*/
 void timer_disable(UNUSED int timer) {
+    if (timer < 2 || timer > 5) return; // Check for valid timer
 
+    struct tim2_5* tim = timer_base[timer];
+
+    // Disable the timer
+    tim->cr1 &= ~1;
 }
 
-void timer_clear_interrupt_bit(UNUSED int timer) {
 
+/*
+  * Clears the timer interrupt bit
+*
+  * @param timer      - The timer
+  */
+void timer_clear_interrupt_bit(UNUSED int timer) {
+    if (timer < 2 || timer > 5) return; // Check for valid timer
+
+    struct tim2_5* tim = timer_base[timer];
+
+    // Clear the update interrupt flag
+    tim->sr &= ~1;
 }
