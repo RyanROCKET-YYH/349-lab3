@@ -9,6 +9,7 @@
 #include <string.h>
 #include <uart.h>
 #include <timer.h>
+#include <servo.h>
 
 // define the passcode's length
 #define PASSCODE_LENGTH   (4)
@@ -139,14 +140,23 @@ int main() {
   // // "LOCK" BUTTON (B1)
   // gpio_init(GPIO_C, 13, MODE_INPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_PULL_UP, ALT0);
 
+  // SERVO 1 (A4)
+  gpio_init(GPIO_C, 1, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
+  // SERVO 2 (A5)
+  gpio_init(GPIO_C, 0, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
+
   // // initialize the i2c_master and lcd_driver
-  timer_init(3, 15999, 999);
+  timer_init(3, 16000, 1000);
+  timer_init(2, 16, 20000);
+  // timer_init(5, 16, 20000);
   i2c_master_init(80);
   lcd_driver_init();
   lcd_clear();
   uint8_t row = 0; //lcd cursor
   uint8_t col = 0; //lcd cursor
 
+  servo_enable(0, 1);
+  servo_set(0, 90);
 
   uart_put_byte('>');
   char buffer[128];

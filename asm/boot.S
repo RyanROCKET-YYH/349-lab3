@@ -57,7 +57,7 @@ ivt:
 .word   spin                /* 41 IRQ25 TIM1_UP */
 .word   spin                /* 42 IRQ26 TIM1_TRG_COM */
 .word   spin                /* 43 IRQ27 TIM1_CC   */
-.word   spin                /* 44 IRQ28 TIM2   */
+.word   tim2_irq_handler    /* 44 IRQ28 TIM2   */
 .word   tim3_irq_handler    /* 45 IRQ29 TIM3 */
 .word   spin                /* 46 IRQ30 TIM4 */
 .word   spin                /* 47 IRQ31 I2C1_EV   */
@@ -79,7 +79,7 @@ ivt:
 .word   spin                /* 63 IRQ47 RESERVED   */
 .word   spin                /* 64 IRQ48 RESERVED   */
 .word   spin                /* 65 IRQ49 RESERVED */
-.word   spin                /* 66 IRQ50 TIM5 */
+.word   tim5_irq_handler    /* 66 IRQ50 TIM5 */
 .word   spin                /* 67 IRQ51 SPI3   */
 .word   spin                /* 68 IRQ52 UART4   */
 .word   spin                /* 69 IRQ53 UART5 */
