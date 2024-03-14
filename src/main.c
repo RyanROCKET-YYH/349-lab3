@@ -8,6 +8,7 @@
 #include <systick.h>
 #include <string.h>
 #include <uart.h>
+#include <timer.h>
 
 // define the passcode's length
 #define PASSCODE_LENGTH   (4)
@@ -29,16 +30,16 @@ void lazy_delay(unsigned int milliseconds) {
  * strncmp():
  * To compare char array s1 and s2
 */
-int strncmp(const char *s1, const char *s2, size_t n) {
-    while (n-- && *s1 && (*s1 == *s2)) {
-        s1++;
-        s2++;
-    }
-    if (n == (size_t)-1) {
-        return 0;
-    }
-    return *(const unsigned char*)s1 - *(const unsigned char*)s2;
-}
+// int strncmp(const char *s1, const char *s2, size_t n) {
+//     while (n-- && *s1 && (*s1 == *s2)) {
+//         s1++;
+//         s2++;
+//     }
+//     if (n == (size_t)-1) {
+//         return 0;
+//     }
+//     return *(const unsigned char*)s1 - *(const unsigned char*)s2;
+// }
 
 /*
  * clear_passcode():
@@ -120,7 +121,6 @@ void key_display(char key, uint8_t *row, uint8_t *col) {
 
 /*
  * main():
- * the main function to implement the lock system.
 */
 int main() {
   // initialize the uart and keypad
@@ -140,6 +140,7 @@ int main() {
   // gpio_init(GPIO_C, 13, MODE_INPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_PULL_UP, ALT0);
 
   // // initialize the i2c_master and lcd_driver
+  timer_init(3, 15999, 999);
   i2c_master_init(80);
   lcd_driver_init();
   lcd_clear();
