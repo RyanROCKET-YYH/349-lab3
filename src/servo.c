@@ -61,6 +61,7 @@ void tim2_irq_handler() {
                 }
             }
         } 
+        timer_clear_interrupt_bit(2);
     }
 }
 
@@ -84,6 +85,7 @@ void tim5_irq_handler() {
                 }
             }
         } 
+        timer_clear_interrupt_bit(5);
     }
 }
 
