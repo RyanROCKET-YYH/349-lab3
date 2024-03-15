@@ -5,7 +5,7 @@
  *
  * @date   March 3rd
  *
- * @author Yuhong Yao
+ * @author Yuhong Yao (yuhongy), Yiying Li (yiyingl4)
  */
 
 #include <unistd.h>

@@ -1,11 +1,11 @@
 /**
- * @file
+ * @file servo.c
  *
- * @brief
+ * @brief functions for servo
  *
- * @date
+ * @date 03/15/2024
  *
- * @author
+ * @author Yuhong Yao (yuhongy), Yiying Li (yiyingl4)
  */
 
 #include <unistd.h>

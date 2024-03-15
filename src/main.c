@@ -12,9 +12,9 @@
 #include <servo.h>
 #include <stdlib.h>
 
-/*
+/**
  * key_display():
- * set the lcd cursor position.
+ * @brief set the lcd cursor position.
 */
 void key_display(char key, uint8_t *row, uint8_t *col) {
     if (*col >= 16) {
@@ -37,7 +37,7 @@ void key_display(char key, uint8_t *row, uint8_t *col) {
 uint16_t enabled = 0;
 int active_channel = -1;
 
-/*
+/**
  * process_minicom_command():
  * @brief to process the input command from minicom
 */
@@ -71,7 +71,7 @@ void process_minicom_command(char *command) {
   }
 }
 
-/*
+/**
  * process_keypad_input():
  * @brief to process the input number from keypad
 */
@@ -113,8 +113,8 @@ void process_keypad_input(uint8_t *row, uint8_t *col) {
   }
 }
 
-/*
- * main():
+/**
+ * @ brief main():
 */
 int main() {
   // initialize the uart and keypad

@@ -1,11 +1,11 @@
 /**
- * @file
+ * @file timer.c
  *
- * @brief
+ * @brief functions to set timer
  *
- * @date
+ * @date 03/15/2024
  *
- * @author
+ * @author Yuhong Yao (yuhongy), Yiying Li (yiyingl4)
  */
 
 #include <unistd.h>

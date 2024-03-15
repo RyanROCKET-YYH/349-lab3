@@ -1,3 +1,12 @@
+/**
+ * @file gpio.c
+ *
+ * @brief functions to set gpio pins
+ *
+ * @date 02/2024
+ *
+ * @author Yuhong Yao (yuhongy), Yiying Li (yiyingl4)
+ */
 #include <gpio.h>
 #include <rcc.h>
 

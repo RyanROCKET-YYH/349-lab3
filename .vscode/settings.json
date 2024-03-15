@@ -58,7 +58,8 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "timer.h": "c",
-    "unistd.h": "c"
+    "unistd.h": "c",
+    "gpio.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
