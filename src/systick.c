@@ -68,7 +68,7 @@ void systick_delay(uint32_t ticks) {
     // // test systick_get_ticks()
     // uint32_t test = systick_get_ticks();
     // printk("test: systick_get_ticks()= %d\n", test);
-    printk("Interrupt!\n");
+    // printk("Interrupt!\n");
 }
 
 /**

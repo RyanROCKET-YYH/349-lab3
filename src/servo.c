@@ -12,6 +12,7 @@
 #include <gpio.h>
 #include <timer.h>
 #include <nvic.h>
+#include <printk.h>
 
 
 #define UNUSED __attribute__((unused))
@@ -31,8 +32,8 @@ typedef struct {
 } ServoChannel;
 
 ServoChannel servos[2] = {
-    {0, SERVO_PERIOD, 0, GPIO_A, CHANNEL0_PIN, 0, 0},
-    {0, SERVO_PERIOD, 0, GPIO_A, CHANNEL1_PIN, 0, 0}
+    {15, SERVO_PERIOD - 15, 0, GPIO_A, CHANNEL0_PIN, 0, 0},
+    {15, SERVO_PERIOD - 15, 0, GPIO_A, CHANNEL1_PIN, 0, 0}
 };
 
 // convert angle to period
@@ -100,7 +101,8 @@ void tim5_irq_handler() {
  * @return 0 on success or -1 on failure
  */
 int servo_enable(UNUSED uint8_t channel, UNUSED uint8_t enabled){
-    if (channel > 1) {
+    if (channel != 0 && channel != 1) {
+        printk("Invalid Channel\n");
         return -1;
     }
 
@@ -114,7 +116,7 @@ int servo_enable(UNUSED uint8_t channel, UNUSED uint8_t enabled){
         }
         // when enabled, enable the periodic signal on the given channel
         if (!sc->is_high) {
-            gpio_set(sc->port, sc->gpio_pin);
+            // gpio_set(sc->port, sc->gpio_pin);
             sc->is_high = 1;
             sc->current_tick = 0;
         }

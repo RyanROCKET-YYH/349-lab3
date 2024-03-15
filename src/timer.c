@@ -121,9 +121,9 @@ void tim3_irq_handler() {
   struct tim2_5* tim3 = timer_base[3];
   if (tim3->sr & TIM_SR_UIF) {
     if (ledstate) {
-      gpio_clr(GPIO_A, 10);
+      gpio_clr(GPIO_A, 5);
     } else {
-      gpio_set(GPIO_A, 10);
+      gpio_set(GPIO_A, 5);
     }
     
     ledstate = !ledstate;
