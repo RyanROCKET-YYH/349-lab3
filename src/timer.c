@@ -14,13 +14,18 @@
 #include <nvic.h>
 #include <gpio.h>
 
+/** @brief define UNUSE for unuse parameters */
 #define UNUSED __attribute__((unused))
+/** @brief set irq number for nvic_irq of timer2 */
 #define TIM2_IRQ_NUMBER (28)
+/** @brief set irq number for nvic_irq of timer3 */
 #define TIM3_IRQ_NUMBER (29)
+/** @brief set irq number for nvic_irq of timer4 */
 #define TIM4_IRQ_NUMBER (30)
+/** @brief set irq number for nvic_irq of timer5 */
 #define TIM5_IRQ_NUMBER (50)
 
-
+/** @brief the base address of each timer */
 struct tim2_5* const timer_base[] = {(void *)0x0,    // N/A - Don't fill out
                                      (void *)0x0,    // N/A - Don't fill out
                                      (void *)0x40000000, // TIMER 2 Base Address
@@ -28,20 +33,20 @@ struct tim2_5* const timer_base[] = {(void *)0x0,    // N/A - Don't fill out
                                      (void *)0x40000800, // TIMER 4 Base Address
                                      (void *)0x40000C00};  // TIMER 5 Base Address
 
-
-
-/*
-* Starts the timer
-*
-* @param timer      - The timer
-* @param prescaler  - Prescalar for clock
-* @param Period     - Period of the timer interrupt
-*/
+/**
+ *
+ * @brief  Starts the timer
+ *
+ *  timer      - The timer
+ *  prescaler  - Prescalar for clock
+ *  Period     - Period of the timer interrupt
+ */
 void timer_init(UNUSED int timer, UNUSED uint32_t prescalar, UNUSED uint32_t period) {
   if (timer < 2 || timer > 5) return; // Check for valid timer
   struct tim2_5* tim = timer_base[timer];
-  // TODO:1. Enable the timer clock in RCC 
+  // 1. Enable the timer clock in RCC 
   struct rcc_reg_map *rcc = RCC_BASE;
+  // 2. Clear the interrupt pending bit
   switch (timer)
   {
   case 2:
@@ -63,20 +68,20 @@ void timer_init(UNUSED int timer, UNUSED uint32_t prescalar, UNUSED uint32_t per
   default:
     break;
   }
-  // 2. Set the prescalar value 
-  // fCK_PSC / (PSC[15:0] + 1).
+  // 3. Set the prescalar value 
   tim->psc = prescalar - 1;
-  // 3. Set the auto-reload value
+  // 4. Set the auto-reload value
   tim->arr = period - 1;
-  // 4. Enable the timer and its interrupt
+  // 5. Enable the timer and its interrupt
   tim->dier |= 1; // Update interrupt enable
   tim->cr1 |= 1; // Enable the timer
 }
 
-/*
-* Stops the timer
-*
-* @param timer      - The timer
+/**
+ *
+ * @brief  Stops the timer
+ *
+ * @param timer      - The timer
 */
 void timer_disable(UNUSED int timer) {
   if (timer < 2 || timer > 5) return; // Check for valid timer
@@ -103,12 +108,12 @@ void timer_disable(UNUSED int timer) {
   }
 }
 
-
-/*
-  * Clears the timer interrupt bit
-*
-  * @param timer      - The timer
-  */
+/**
+ *
+ * @brief  Clears the timer interrupt bit
+ *
+ * @param timer      - The timer
+*/
 void timer_clear_interrupt_bit(UNUSED int timer) {
   if (timer < 2 || timer > 5) return; // Check for valid timer
   struct tim2_5* tim = timer_base[timer];
@@ -116,7 +121,13 @@ void timer_clear_interrupt_bit(UNUSED int timer) {
   tim->sr &= ~1;
 }
 
+/** @brief set the led state */
 volatile uint8_t ledstate = 0;
+
+/**
+ * tim3_irq_handler():
+ * @brief  Set time 3 interrupt requestion handler
+*/
 void tim3_irq_handler() {
   struct tim2_5* tim3 = timer_base[3];
   if (tim3->sr & TIM_SR_UIF) {

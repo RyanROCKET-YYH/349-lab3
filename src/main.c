@@ -37,9 +37,13 @@ void key_display(char key, uint8_t *row, uint8_t *col) {
 uint16_t enabled = 0;
 int active_channel = -1;
 
+/*
+ * process_minicom_command():
+ * @brief to process the input command from minicom
+*/
 void process_minicom_command(char *command) {
   int channel = -1;
-
+  // command: enable the servo
   if (strncmp(command, "enable", 6) == 0) {
     if (command[7] >= '0' && command[7] <= '9') {
       channel = command[7] - '0' - 1;
@@ -49,7 +53,9 @@ void process_minicom_command(char *command) {
     } else {
       printk("Invalid command\n");
     }
-  } else if (strncmp(command, "disable", 7) == 0) {
+  } 
+  // command: disable the servo
+  else if (strncmp(command, "disable", 7) == 0) {
     if (command[8] >= '0' && command[8] <= '9') {
       channel = command[8] - '0' - 1;
       servo_enable(channel, 0);
@@ -65,6 +71,10 @@ void process_minicom_command(char *command) {
   }
 }
 
+/*
+ * process_keypad_input():
+ * @brief to process the input number from keypad
+*/
 void process_keypad_input(uint8_t *row, uint8_t *col) {
   static char angle_str[4] = {0};  // buffer for angle input
   static int angle_idx = 0;  // index of the string
@@ -112,7 +122,7 @@ int main() {
   uart_init(115200);
   keypad_init();
 
-  // // set GPIO
+  // set GPIO
   // onboard LED (D13)
   gpio_init(GPIO_A, 5, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
   // SERVO 1 (A0)
@@ -120,7 +130,7 @@ int main() {
   // SERVO 2 (A1)
   gpio_init(GPIO_A, 1, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
 
-  // // initialize the i2c_master and lcd_driver
+  // initialize the i2c_master and lcd_driver
   timer_init(3, 16000, 3000); // allow the onboard led to blink every 3 seconds
   i2c_master_init(80);
   lcd_driver_init();

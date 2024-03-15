@@ -9,6 +9,10 @@
 
 #include <nvic.h>
 
+/*
+ * nvic_irq():
+ * @brief to enable the UART interrupt
+*/
 void nvic_irq( uint8_t irq_num, uint8_t status ) {
   uint8_t shift_num = irq_num % NVIC_REG_SIZE;
   uint8_t reg_num = irq_num / NVIC_REG_SIZE;
@@ -29,6 +33,10 @@ void nvic_irq( uint8_t irq_num, uint8_t status ) {
   return;
 }
 
+/*
+ * nvic_clear_pending():
+ * @brief clear the interrupt pending bit
+*/
 void nvic_clear_pending( uint8_t irq_num ) {
   uint8_t shift_num = irq_num % NVIC_REG_SIZE;
   uint8_t reg_num = irq_num / NVIC_REG_SIZE;

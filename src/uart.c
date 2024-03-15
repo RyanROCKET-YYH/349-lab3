@@ -15,8 +15,10 @@
 #include <nvic.h>
 #include <gpio.h>
 
+/** @brief define UNUSE for unuse parameters */
 #define UNUSED __attribute__((unused))
 
+/** @brief set the buffer size */
 #define BUFFER_SIZE (16)
 
 /** @brief The UART register map. */
@@ -51,38 +53,50 @@ struct uart_reg_map {
 /** @brief Read data registter not empty */
 #define UART_SR_RXNE    (1 << 5)
 
+/** @brief set the RXNEIE bit of CR1 in URAT. */
 #define UART_CR1_RXNEIE (1 << 5)
+
+/** @brief set the TXEIE bit of CR1 in URAT. */
 #define UART_CR1_TXEIE  (1 << 7)
+
+/** @brief set the TCIE bit of CR1 in URAT. */
 #define UART_CR1_TCIE   (1 << 6)
+
+/** @brief set the number of IRQ in URAT. */
 #define UART_IRQ_NUMBER (38)
 
+/** @brief define Ring buffer */
 typedef struct {
+    /** @brief Ring buffer size*/
     unsigned char buffer[BUFFER_SIZE];
+    /** @brief define Ring buffer head */
     volatile uint16_t head;
+    /** @brief define Ring buffer tail */
     volatile uint16_t tail;
 } RingBuffer;
 
+/** @brief define txBuffer. */
 RingBuffer txBuffer;
+/** @brief define rxBuffer;. */
 RingBuffer rxBuffer;
 
-// initialize ring buffer as empty by setting both head and tail to 0
+/** @brief initialize ring buffer as empty by setting both head and tail to 0. */
 void RingBuffer_init(RingBuffer *rb) {
     rb->head = 0;
     rb->tail = 0;
 }
 
-// check if the ring buffer is empty, if head equal to tail then it can be considered as empty
+/** @brief check if the ring buffer is empty, if head equal to tail then it can be considered as empty. */
 int RingBuffer_isEmpty(RingBuffer *rb) {
     return rb->head == rb->tail;
 }
 
-
-// check if buffer is full, since mod or divid will take a lot cycles, use masks to determine if full when tail wrapped to head
+/** @brief check if buffer is full, since mod or divid will take a lot cycles, use masks to determine if full when tail wrapped to head. */
 int RingBuffer_isFull(RingBuffer *rb) {
     return (((rb->tail + 1) & (BUFFER_SIZE - 1)) == rb->head); 
 }
 
-// add a byte to the buffer at tail
+/** @brief add a byte to the buffer at tail. */
 int RingBuffer_Write(RingBuffer *rb, char data) {
     if (RingBuffer_isFull(rb)) {
         return -1; // buffer is full
@@ -93,7 +107,7 @@ int RingBuffer_Write(RingBuffer *rb, char data) {
     return 0;
 }
 
-// read the buffer from head and advance the head
+/** @brief read the buffer from head and advance the head. */
 int RingBuffer_Read(RingBuffer *rb, char *data) {
     if (RingBuffer_isEmpty(rb)) {
         return -1;
@@ -104,6 +118,10 @@ int RingBuffer_Read(RingBuffer *rb, char *data) {
 }
 
 
+/**
+ * @brief uart_init: UART initialization function
+ * baud  - baud rate
+ */
 void uart_init(UNUSED int baud) {
     //init ring buffer
     RingBuffer_init(&txBuffer);
@@ -128,6 +146,10 @@ void uart_init(UNUSED int baud) {
     return;
 }
 
+/**
+ * @brief uart_put_byte: transmits a byte over UART
+ * c  - character to be sent
+ */
 int uart_put_byte(UNUSED char c) {
     struct uart_reg_map *uart = UART2_BASE;
     int status = RingBuffer_Write(&txBuffer, c);
@@ -135,6 +157,10 @@ int uart_put_byte(UNUSED char c) {
     return status;
 }
 
+/**
+ * @brief uart_get_byte: receives a byte over UART
+ * c  - character to be sent
+ */
 int uart_get_byte(UNUSED char *c) {
     char data;
     int status = RingBuffer_Read(&rxBuffer, &data);
@@ -145,6 +171,10 @@ int uart_get_byte(UNUSED char *c) {
     return status;
 }
 
+/**
+ * @brief uart_write: support writing to stdout and return −1 if this is not the case
+ * 
+ */
 int uart_write(UNUSED int file, UNUSED char *ptr, UNUSED int len) {
     if (file != STDOUT_FILENO) {
         return -1;
@@ -158,6 +188,10 @@ int uart_write(UNUSED int file, UNUSED char *ptr, UNUSED int len) {
     return len;
 }
 
+/**
+ * @brief uart_read: support reading from stdin and return −1 if this is not the case
+ * 
+ */
 int uart_read(UNUSED int file, char *ptr, int len) {
     if (file != STDIN_FILENO) {
         return -1;
@@ -193,6 +227,10 @@ int uart_read(UNUSED int file, char *ptr, int len) {
 }
 
 
+/**
+ * @brief uart_irq_handler: to handle the interrupt request (both receive and transmit)
+ * 
+ */
 void uart_irq_handler() {
     struct uart_reg_map *uart = UART2_BASE;
     int transmitCount = 0;

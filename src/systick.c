@@ -1,17 +1,18 @@
 /**
-* @file
+* @file systick.c
 *
-* @brief
+* @brief functions about systick interrupt
 *
-* @date
+* @date 03/15/2024
 *
-* @author
+* @author Yiying Li, Yuhong Yao
 */
 
 #include <unistd.h>
 #include <systick.h>
 #include <printk.h>
 
+/** @brief define UNUSE for unuse parameters */
 #define UNUSED __attribute__((unused))
 
 /** @brief The systick(STK) timer register map. */
@@ -34,19 +35,22 @@ struct stk_reg_map {
 /** @brief STK CTRL: COUNTFLAG bit */
 #define STK_CTRL_COUNTFLAG (1 << 16)
 
-// count the glocal tick
+/** @brief count the glocal tick */
 volatile uint32_t g_tick_count = 0;
-// uint32_t g_get_tick;
 
-
+/**
+* systick_init():
+* @brief initialize the systick interrupt
+*
+*/
 void systick_init() {
     
     struct stk_reg_map* stk = STK_BASE;
 
-    // Frequency: 16MHz 16000000 / 1000 -1
+    // Frequency: 16MHz( 16000000 / 1000 -1 )
     stk->LOAD = (uint32_t)15999;
     // clear current value
-    stk->VAL = (u_int16_t)0; // ? 
+    stk->VAL = (u_int16_t)0;
 
     // When ENABLE is set to 1, the counter loads the RELOAD value from the LOAD register and then counts down
     stk->CTRL |= STK_CTRL_EN;
@@ -58,17 +62,12 @@ void systick_init() {
 * systick_delay():
 * @brief delays the processor for ticks milliseconds
 *
+* @param ticks: to count the delay ticks
 */
 void systick_delay(uint32_t ticks) {
     uint32_t start = g_tick_count;
     // check the delay time
     while (((g_tick_count - start) - ticks));
-    // // test
-    // printk("\nset delay: %d millisecond\n", ticks);
-    // // test systick_get_ticks()
-    // uint32_t test = systick_get_ticks();
-    // printk("test: systick_get_ticks()= %d\n", test);
-    // printk("Interrupt!\n");
 }
 
 /**

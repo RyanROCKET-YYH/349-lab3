@@ -4,13 +4,15 @@
 
 @mainpage 349 Lab 3
 
-Any additional comments you want to make can go here.  Did you like the
-project?  Was it too hard, too easy? Well, you get the idea.
 
-Include a breakdown of the work split between you and your partner.
+Yuhong Yao (yuhongy), 
+Yiying Li (yiyingl4)
 
-As a last little note, please make sure that all the documentation you
-turn in is true and accurate.  Otherwise, we will deduct points.
+Yiying took part in 
+
+Yiying took part in the systick and timer part. Yuhong took part in uart, and servo part, and combined them together. 
+Also, he fixed a lot of bugs in the whole code.  
+It took us some time to get familiar with how to process interrupts and debugs.
 
 
 */
