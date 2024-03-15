@@ -63,7 +63,7 @@ void process_keypad_input(uint8_t *row, uint8_t *col) {
   static char angle_str[4] = {0};  // buffer for angle input
   static int angle_idx = 0;  // index of the string
 
-  if (enabled && (active_channel >= 0)) {
+  if ((active_channel >= 0)) {
     char key = keypad_read();
     if (key != '\0') {
       if (key == '#') {
@@ -92,7 +92,7 @@ void process_keypad_input(uint8_t *row, uint8_t *col) {
         angle_str[angle_idx++] = key;
         key_display(key, row, col);
       }
-      
+
     }
   }
 }
@@ -131,29 +131,17 @@ int main() {
 
   char buffer[128];
   while (1) {
-    // uint32_t current_time = systick_get_ticks();
-    printk("> ");
-    if (uart_read(STDIN_FILENO, buffer, sizeof(buffer) - 1) > 0) {
-      process_minicom_command(buffer);
+    uint32_t current_time = systick_get_ticks();
+    if ((current_time - last_uart_time) >= uart_interval) {
+      printk("> ");
+      if (uart_read(STDIN_FILENO, buffer, sizeof(buffer) - 1) > 0) {
+        process_minicom_command(buffer);
+      }
+      last_uart_time = systick_get_ticks();
     }
     if (enabled) {
-      last_uart_time = systick_get_ticks();
-      while ((systick_get_ticks() - last_uart_time) < uart_interval) {
-        process_keypad_input(&row, &col);
-      }
+      process_keypad_input(&row, &col);
     }
-    // if ((current_time - last_uart_time) >= uart_interval) {
-    //   printk("> ");
-    //   if (uart_read(STDIN_FILENO, buffer, sizeof(buffer) - 1) > 0) {
-    //     process_minicom_command(buffer);
-    //   }
-    //   if (enabled) {
-    //     last_uart_time = systick_get_ticks();
-    //     while ((systick_get_ticks() - last_uart_time) < uart_interval) {
-    //       process_keypad_input(&row, &col);
-    //     }
-    //   }
-    // }
   }
   return 0;
 }
