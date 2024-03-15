@@ -8,8 +8,8 @@
 // the variables of keypad(columns and rows)
 #define COL1_PORT  0
 #define COL1_PIN   7
-#define COL2_PORT  0
-#define COL2_PIN   5
+#define COL2_PORT  2
+#define COL2_PIN   0
 #define COL3_PORT  2
 #define COL3_PIN   7
 
@@ -29,7 +29,7 @@
 const int row_pins[NUM_ROWS] = {ROW1_PIN, ROW2_PIN, ROW3_PIN, ROW4_PIN};
 const int col_pins[NUM_COLS] = {COL1_PIN, COL2_PIN, COL3_PIN};
 const int row_ports[NUM_ROWS] = {ROW1_PORT, ROW2_PORT, ROW3_PORT, ROW4_PORT};
-const int col_ports[NUM_COLS] = {GPIO_A, GPIO_A, GPIO_C};
+const int col_ports[NUM_COLS] = {GPIO_A, GPIO_C, GPIO_C};
 
 const char key_map[NUM_ROWS][NUM_COLS] = {
     {'1', '2', '3'},
@@ -48,7 +48,7 @@ void keypad_init(){
 
     // columns as output
     gpio_init(GPIO_A, 7, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);		//pa_7
-    gpio_init(GPIO_A, 5, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);		//pa_5
+    gpio_init(GPIO_C, 0, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);		//pc_0
     gpio_init(GPIO_C, 7, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);		//pc_7
 
     //rows as input 

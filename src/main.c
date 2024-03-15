@@ -139,16 +139,17 @@ int main() {
   // gpio_init(GPIO_B, 10, MODE_INPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_PULL_UP, ALT0);
   // // "LOCK" BUTTON (B1)
   // gpio_init(GPIO_C, 13, MODE_INPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_PULL_UP, ALT0);
-
-  // SERVO 1 (A4)
-  gpio_init(GPIO_C, 1, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
-  // SERVO 2 (A5)
-  gpio_init(GPIO_C, 0, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
+  // onboard LED D13
+  gpio_init(GPIO_A, 5, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
+  // SERVO 1 (A0)
+  gpio_init(GPIO_A, 0, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
+  // SERVO 2 (A1)
+  gpio_init(GPIO_A, 1, MODE_GP_OUTPUT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT0);
 
   // // initialize the i2c_master and lcd_driver
   timer_init(3, 16000, 1000);
-  timer_init(2, 16, 20000);
-  // timer_init(5, 16, 20000);
+  // timer_init(2, 1600, 200);
+  // timer_init(5, 1600, 200);
   i2c_master_init(80);
   lcd_driver_init();
   lcd_clear();
@@ -156,7 +157,23 @@ int main() {
   uint8_t col = 0; //lcd cursor
 
   servo_enable(0, 1);
-  servo_set(0, 90);
+  servo_set(0,90);
+
+  servo_enable(1, 1);
+  
+  servo_set(1,90);
+  // servo_enable(1, 0);
+  // servo_enable(1, 0);
+  // uint16_t x = 10;
+  // while (1){
+  //   // if (x < 180) {
+  //   //   x += 10;
+  //   // } else {
+  //   //   x = 10;
+  //   // }
+  //   // servo_set(0,x);
+  //   // servo_set(1,x);
+  // }
 
   uart_put_byte('>');
   char buffer[128];
