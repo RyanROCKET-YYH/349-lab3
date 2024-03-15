@@ -46,6 +46,8 @@ void process_minicom_command(char *command) {
       servo_enable(channel, 1);
       enabled = 1;
       active_channel = channel;
+    } else {
+      printk("Invalid command\n");
     }
   } else if (strncmp(command, "disable", 7) == 0) {
     if (command[8] >= '0' && command[8] <= '9') {
@@ -53,8 +55,12 @@ void process_minicom_command(char *command) {
       servo_enable(channel, 0);
       enabled = 0;
       active_channel = -1;
+    } else {
+      printk("Invalid command\n");
     }
   } else {
+    enabled = 0;
+    active_channel = -1;
     printk("Invalid command\n");
   }
 }
@@ -122,8 +128,9 @@ int main() {
 
   uint8_t row = 0; //lcd cursor
   uint8_t col = 0; //lcd cursor
-  uint32_t last_uart_time = 0;
   const uint32_t uart_interval = 10000;   // 10 seconds
+  uint32_t last_uart_time = systick_get_ticks() - uart_interval;
+  
 
   printk("\nWelecome to Servo Controller!\nCommands\n  enable <ch>:  Enable servo channel\n");
   printk("  disable <ch>: Disable servo channel\n  Set the servo angle using the keypad\n\n");
@@ -137,7 +144,7 @@ int main() {
       if (uart_read(STDIN_FILENO, buffer, sizeof(buffer) - 1) > 0) {
         process_minicom_command(buffer);
       }
-      last_uart_time = systick_get_ticks();
+      last_uart_time = current_time;
     }
     if (enabled) {
       process_keypad_input(&row, &col);
